@@ -1,0 +1,5 @@
+export const CANNOT_BE_EMPTY = "Cannot be empty."
+export const UP_TO_191_CHARS_ONLY = "Only up to 191 characters is allowed."
+export const INVALID_DATE = "Invalid date."
+export const NUMBER_EXPECTED = "Invalid numeric value."
+export const POSITIVE_OR_NEGATIVE = "Should be a positive or negative number."
