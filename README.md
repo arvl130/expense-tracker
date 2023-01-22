@@ -1,14 +1,12 @@
 # Expense Tracker
 
-I want to be able to access, record, and update my expense catalog even when I'm
-not in front of my computer. This is an I'm building to help me accomplish that.
+I want to be able to access, record, and update my expense catalog even when I'm not in front of my computer. This is an app I'm building to help me accomplish that.
 
 ## Setup
 
-This project uses Amazon S3 for file storage, Google OAuth for authentication, and
-MySQL/MariaDB for the database.
+This project uses Amazon S3 for file storage, Google OAuth 2.0 for authentication, and MySQL/MariaDB for the database.
 
-Create an IAM user for this project in your AWS account with the following permissions:
+[Create an IAM user](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html) for this project in your AWS account with the following permissions:
 
 ```
 GetObject
@@ -16,8 +14,7 @@ PutObject
 DeleteObject
 ```
 
-Acquire OAuth 2.0 keys in your Google account with the following as 'Authorized redirect
-URIs':
+[Obtain OAuth 2.0 keys](https://developers.google.com/identity/protocols/oauth2) from your Google account with the following as 'Authorized redirect URIs':
 
 ```
 https://{YOUR_DOMAIN}/api/auth/callback/google
