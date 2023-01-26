@@ -31,7 +31,7 @@ $ cd expense-tracker
 Pull down the project dependencies:
 
 ```sh
-$ yarn install # or npm install
+$ pnpm install # or npm install
 ```
 
 Copy the `.env.template` and fill in the required keys.
@@ -44,19 +44,19 @@ $ vi .env # :wq to close
 Apply the database schema:
 
 ```sh
-$ yarn run prisma db push # or npx prisma db push
+$ pnpm exec prisma db push # or npx prisma db push
 ```
 
 Run the development server:
 
 ```sh
-$ yarn run dev # or npm run dev
+$ pnpm dev # or npm run dev
 ```
 
 To build for production, run the following:
 
 ```sh
-$ yarn run build # or npm run build
+$ pnpm build # or npm run build
 ```
 
 ## License
