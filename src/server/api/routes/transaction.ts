@@ -4,6 +4,8 @@ import {
   GetTransactionSchema,
   GetTransactionsSchema,
   CreateTransactionSchema,
+  EditTransactionSchema,
+  DeleteTransactionSchema,
 } from "@/models/transaction"
 
 export const transactionsRouter = router({
@@ -62,6 +64,66 @@ export const transactionsRouter = router({
           description: input.description,
           amount: input.amount,
           userId: input.userId,
+          operation: input.operation,
+        },
+      })
+    }),
+  edit: protectedProcedure
+    .input(EditTransactionSchema)
+    .mutation(async ({ ctx, input }) => {
+      const transaction = await ctx.prisma.transaction.findUnique({
+        where: {
+          id: input.id,
+        },
+      })
+
+      if (!transaction)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        })
+
+      // Users can only edit their own transactions.
+      if (transaction.userId !== ctx.user.id)
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+        })
+
+      return ctx.prisma.transaction.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          accomplishedAt: input.accomplishedAt,
+          description: input.description,
+          amount: input.amount,
+          userId: input.userId,
+          operation: input.operation,
+        },
+      })
+    }),
+  delete: protectedProcedure
+    .input(DeleteTransactionSchema)
+    .mutation(async ({ ctx, input }) => {
+      const transaction = await ctx.prisma.transaction.findUnique({
+        where: {
+          id: input.id,
+        },
+      })
+
+      if (!transaction)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        })
+
+      // Users can only delete their own transactions.
+      if (transaction.userId !== ctx.user.id)
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+        })
+
+      return ctx.prisma.transaction.delete({
+        where: {
+          id: input.id,
         },
       })
     }),
