@@ -52,7 +52,7 @@ model User {
 model UserSettings {
   userId        String @id
   expectedTotal String
-  user          User?  @relation(fields: [userId], references: [id])
+  user          User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -75,7 +75,7 @@ model Transaction {
   amount           Int
   accomplishedAt   String
   userId           String
-  user             User?              @relation(fields: [userId], references: [id])
+  user             User?              @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactionImage TransactionImage[]
 }
 
@@ -84,5 +84,5 @@ model TransactionImage {
   path          String
   title         String
   transactionId String
-  transaction   Transaction? @relation(fields: [transactionId], references: [id])
+  transaction   Transaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
 }
