@@ -2,17 +2,15 @@ import Loading from "@/components/Loading"
 import Link from "next/link"
 import { useRedirectOnUnauthenticated } from "@/hooks/useRedirect"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   CreateTransactionSchema,
   CreateTransactionType,
 } from "@/models/transaction"
 import { api } from "@/utils/api"
-import { useRouter } from "next/router"
-import { useRef } from "react"
 
 export default function Home() {
-  const uploadRef = useRef<null | HTMLInputElement>(null)
   const router = useRouter()
 
   const {
@@ -24,8 +22,8 @@ export default function Home() {
   })
 
   const { mutate: createTransaction } = api.transactions.create.useMutation({
-    onSuccess: () => {
-      router.push("/")
+    onSuccess: (transaction) => {
+      router.push(`/transactions/${transaction.id}/view`)
     },
   })
 
@@ -83,7 +81,7 @@ export default function Home() {
           <input
             type="text"
             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-300/40"
-            placeholder="Enter some details ..."
+            placeholder="Some important details ..."
             {...register("description")}
           />
           {errors.description && (
@@ -94,12 +92,31 @@ export default function Home() {
         </div>
         <div className="grid mb-3">
           <label className="font-medium mb-1">
+            Operation <span className="text-red-500 font-bold">*</span>
+          </label>
+          <select
+            className="px-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-300/40"
+            {...register("operation")}
+            defaultValue={"ADD"}
+          >
+            <option value={"ADD"}>Add</option>
+            <option value={"SUB"}>Subtract</option>
+          </select>
+          {errors.operation && (
+            <span className="text-red-500 mt-1">
+              {errors.operation.message}
+            </span>
+          )}
+        </div>
+        <div className="grid mb-3">
+          <label className="font-medium mb-1">
             Amount (₱) <span className="text-red-500 font-bold">*</span>
           </label>
           <input
             type="number"
             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-300/40"
-            defaultValue={0}
+            min={1}
+            defaultValue={1}
             {...register("amount", {
               valueAsNumber: true,
             })}

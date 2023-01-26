@@ -3,7 +3,7 @@ import {
   CANNOT_BE_EMPTY,
   INVALID_DATE,
   NUMBER_EXPECTED,
-  POSITIVE_OR_NEGATIVE,
+  POSITIVE_ONLY,
 } from "./validation-messages"
 
 export const GetTransactionsSchema = z.object({
@@ -26,24 +26,43 @@ export const CreateTransactionSchema = z.object({
   description: z.string().min(1, {
     message: CANNOT_BE_EMPTY,
   }),
-  amount: z.union([
-    z
-      .number({
-        invalid_type_error: NUMBER_EXPECTED,
-      })
-      .positive({
-        message: POSITIVE_OR_NEGATIVE,
-      })
-      .finite(),
-    z
-      .number({
-        invalid_type_error: NUMBER_EXPECTED,
-      })
-      .negative({
-        message: POSITIVE_OR_NEGATIVE,
-      })
-      .finite(),
-  ]),
+  operation: z.union([z.literal("ADD"), z.literal("SUB")]),
+  amount: z
+    .number({
+      invalid_type_error: NUMBER_EXPECTED,
+    })
+    .positive({
+      message: POSITIVE_ONLY,
+    })
+    .finite(),
 })
 
 export type CreateTransactionType = z.infer<typeof CreateTransactionSchema>
+
+export const EditTransactionSchema = z.object({
+  id: z.string().uuid(),
+  userId: z.string().cuid(),
+  accomplishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
+    message: INVALID_DATE,
+  }),
+  description: z.string().min(1, {
+    message: CANNOT_BE_EMPTY,
+  }),
+  operation: z.union([z.literal("ADD"), z.literal("SUB")]),
+  amount: z
+    .number({
+      invalid_type_error: NUMBER_EXPECTED,
+    })
+    .positive({
+      message: POSITIVE_ONLY,
+    })
+    .finite(),
+})
+
+export type EditTransactionType = z.infer<typeof EditTransactionSchema>
+
+export const DeleteTransactionSchema = z.object({
+  id: z.string().uuid(),
+})
+
+export type DeleteTransactionType = z.infer<typeof GetTransactionSchema>

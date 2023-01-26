@@ -63,9 +63,15 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+enum Operation {
+  ADD
+  SUB
+}
+
 model Transaction {
   id               String             @id @default(uuid())
   description      String
+  operation        Operation
   amount           Int
   accomplishedAt   String
   userId           String
