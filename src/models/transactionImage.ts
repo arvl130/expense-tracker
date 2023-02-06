@@ -1,6 +1,12 @@
 import { z } from "zod"
 import { CANNOT_BE_EMPTY } from "./validation-messages"
 
+export const GetTransactionImageSchema = z.object({
+  id: z.string(),
+})
+
+export type GetTransactionImageType = z.infer<typeof GetTransactionImageSchema>
+
 export const CreateTransactionImageSchema = z.object({
   path: z.string(),
   title: z.string(),
@@ -32,6 +38,43 @@ export const CreateTransactionImageFormSchema = z.object({
 
 export type CreateTransactionImageFormType = z.infer<
   typeof CreateTransactionImageFormSchema
+>
+
+export const EditTransactionImageSchema = z.object({
+  id: z.string().uuid(),
+  path: z.string(),
+  title: z.string(),
+  transactionId: z.string().uuid(),
+})
+
+export type EditTransactionImageType = z.infer<
+  typeof EditTransactionImageSchema
+>
+
+export const EditTransactionImageFormSchema = z.object({
+  id: z.string().uuid(),
+  files: z
+    .custom<FileList>()
+    .refine(
+      (files) => files.length === 0 || files.length === 1,
+      "Please select only a single file."
+    )
+    .refine(
+      (files) =>
+        Array.from(files).every(
+          (file) =>
+            file.type === "image/png" ||
+            file.type === "image/jpg" ||
+            file.type === "image/jpeg"
+        ),
+      "Invalid file type."
+    ),
+  title: z.string().min(1, CANNOT_BE_EMPTY),
+  transactionId: z.string().uuid(),
+})
+
+export type EditTransactionImageFormType = z.infer<
+  typeof EditTransactionImageFormSchema
 >
 
 export const DeleteTransactionImageSchema = z.object({
