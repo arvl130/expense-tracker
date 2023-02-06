@@ -4,6 +4,13 @@ import Head from "next/head"
 import { api } from "@/utils/api"
 import { SessionProvider, signIn, signOut } from "next-auth/react"
 import { useSession } from "next-auth/react"
+import { Inter } from "@next/font/google"
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: "variable",
+  variable: "--font-inter",
+})
 
 function Navbar() {
   const { status } = useSession()
@@ -55,18 +62,20 @@ function Footer() {
 function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session}>
-      <Head>
-        <title>Expense Tracker</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Track your expenses" />
-      </Head>
-      <div className="min-h-screen font-[Inter] text-zinc-700 grid grid-rows-[auto_1fr]">
-        <Navbar />
-        <div>
-          <Component {...pageProps} />
+      <div className={`${inter.variable} font-sans`}>
+        <Head>
+          <title>Expense Tracker</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="description" content="Track your expenses" />
+        </Head>
+        <div className="min-h-screen text-zinc-700 grid grid-rows-[auto_1fr]">
+          <Navbar />
+          <div>
+            <Component {...pageProps} />
+          </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
     </SessionProvider>
   )
 }
