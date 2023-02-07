@@ -68,42 +68,60 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      <div className="max-w-2xl mx-auto w-full mb-3">
-        <div>
-          <span className="font-medium">Total</span>: ₱
-          {transactions.reduce((prevValue, currTransaction) => {
-            if (currTransaction.operation === "ADD")
-              return prevValue + currTransaction.amount
+      {transactions.length > 0 ? (
+        <>
+          <div className="max-w-2xl mx-auto w-full mb-3">
+            <div>
+              <span className="font-medium">Total</span>: ₱
+              {transactions.reduce((prevValue, currTransaction) => {
+                if (currTransaction.operation === "ADD")
+                  return prevValue + currTransaction.amount
 
-            return prevValue - currTransaction.amount
-          }, 0)}
-        </div>
-      </div>
-      <div>
-        <div className="max-w-2xl mx-auto grid grid-cols-[10rem_1fr] gap-2 bg-zinc-600 text-white px-4 py-2 font-medium">
-          <div>Date</div>
-          <div>Amount</div>
-        </div>
-        {transactions.map((transaction) => {
-          return (
-            <div
-              key={transaction.id}
-              className="max-w-2xl mx-auto grid grid-cols-[10rem_1fr_4rem] gap-2 px-4 py-2 border-b border-gray-300"
-            >
-              <div>{transaction.accomplishedAt}</div>
-              <div>₱{transaction.amount}</div>
-              <div className="text-center">
-                <Link
-                  href={`/transactions/${transaction.id}/view`}
-                  className="font-medium text-blue-500 hover:underline"
-                >
-                  View
-                </Link>
-              </div>
+                return prevValue - currTransaction.amount
+              }, 0)}
             </div>
-          )
-        })}
-      </div>
+          </div>
+          <div>
+            <div className="max-w-2xl mx-auto grid grid-cols-[10rem_1fr] gap-2 bg-zinc-600 text-white px-4 py-2 font-medium">
+              <div>Date</div>
+              <div>Amount</div>
+            </div>
+            {transactions.map((transaction) => {
+              return (
+                <div
+                  key={transaction.id}
+                  className="max-w-2xl mx-auto grid grid-cols-[10rem_1fr_4rem] gap-2 px-4 py-2 border-b border-gray-300"
+                >
+                  <div>{transaction.accomplishedAt}</div>
+                  <div>₱{transaction.amount}</div>
+                  <div className="text-center">
+                    <Link
+                      href={`/transactions/${transaction.id}/view`}
+                      className="font-medium text-blue-500 hover:underline"
+                    >
+                      View
+                    </Link>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </>
+      ) : (
+        <div className="text-center pt-14">
+          <p className="mb-4 font-medium">No transactions found.</p>
+          <p>
+            Click the{" "}
+            <Link
+              className="font-semibold text-blue-500 hover:underline"
+              href="/transactions/create"
+            >
+              Create
+            </Link>{" "}
+            button to create a transaction.
+          </p>
+        </div>
+      )}
     </main>
   )
 }
