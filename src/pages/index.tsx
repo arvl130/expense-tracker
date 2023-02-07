@@ -56,7 +56,7 @@ export default function Home() {
     )
 
   return (
-    <main className="max-w-6xl mx-auto p-6 grid grid-rows-[auto_1fr]">
+    <main className="max-w-6xl mx-auto h-full p-6 grid grid-rows-[auto_auto_1fr]">
       <div className="flex justify-between mb-3">
         <h2 className="text-lg font-semibold">Transactions</h2>
         <div className="flex">
@@ -66,6 +66,17 @@ export default function Home() {
           >
             Create
           </Link>
+        </div>
+      </div>
+      <div className="max-w-2xl mx-auto w-full mb-3">
+        <div>
+          <span className="font-medium">Total</span>: ₱
+          {transactions.reduce((prevValue, currTransaction) => {
+            if (currTransaction.operation === "ADD")
+              return prevValue + currTransaction.amount
+
+            return prevValue - currTransaction.amount
+          }, 0)}
         </div>
       </div>
       <div>
@@ -80,7 +91,7 @@ export default function Home() {
               className="max-w-2xl mx-auto grid grid-cols-[10rem_1fr_4rem] gap-2 px-4 py-2 border-b border-gray-300"
             >
               <div>{transaction.accomplishedAt}</div>
-              <div>{transaction.amount}</div>
+              <div>₱{transaction.amount}</div>
               <div className="text-center">
                 <Link
                   href={`/transactions/${transaction.id}/view`}
