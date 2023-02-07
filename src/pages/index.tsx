@@ -25,7 +25,7 @@ export default function Home() {
           <div>
             <Link
               href="/transactions/create"
-              className="px-4 py-2 rounded-md bg-green-500 text-white hover:bg-green-400 transition duration-200 font-medium"
+              className="px-4 py-2 rounded-md border border-gray-300 text-zinc-800 hover:bg-zinc-100 transition duration-200 font-medium"
             >
               Create
             </Link>
@@ -43,7 +43,7 @@ export default function Home() {
           <div>
             <Link
               href="/transactions/create"
-              className="px-4 py-2 rounded-md bg-green-500 text-white hover:bg-green-400 transition duration-200 font-medium"
+              className="px-4 py-2 rounded-md border border-gray-300 text-zinc-800 hover:bg-zinc-100 transition duration-200 font-medium"
             >
               Create
             </Link>
