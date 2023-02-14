@@ -7,7 +7,7 @@ import {
   EditTransactionImageSchema,
   GetUploadUrlSchema,
 } from "@/models/transactionImage"
-import { deleteObject, getUploadUrl } from "@/server/s3"
+import { deleteObject, getUploadUrl, listObjects } from "@/server/s3"
 
 export const transactionImagesRouter = router({
   get: protectedProcedure
@@ -147,4 +147,50 @@ export const transactionImagesRouter = router({
     .mutation(({ ctx, input: { fileType, byteLength } }) => {
       return getUploadUrl(ctx.s3, ctx.user.id, fileType, byteLength)
     }),
+  listOrphanedObjects: protectedProcedure.query(async ({ ctx }) => {
+    const remoteObjects = await listObjects(ctx.s3, ctx.user.id)
+    const transactionImages = await ctx.prisma.transactionImage.findMany({
+      where: {
+        transaction: {
+          user: {
+            id: ctx.user.id,
+          },
+        },
+      },
+      include: {
+        transaction: true,
+      },
+    })
+
+    const transactionImagePaths = transactionImages.flatMap(({ path }) => path)
+    return remoteObjects.filter((remoteObject) => {
+      return !transactionImagePaths.includes(remoteObject)
+    }).length
+  }),
+  clearOrphanedObjects: protectedProcedure.mutation(async ({ ctx }) => {
+    const remoteObjects = await listObjects(ctx.s3, ctx.user.id)
+    const transactionImages = await ctx.prisma.transactionImage.findMany({
+      where: {
+        transaction: {
+          user: {
+            id: ctx.user.id,
+          },
+        },
+      },
+      include: {
+        transaction: true,
+      },
+    })
+
+    const transactionImagePaths = transactionImages.flatMap(({ path }) => path)
+    const orphanedObjects = remoteObjects.filter((remoteObject) => {
+      return !transactionImagePaths.includes(remoteObject)
+    })
+
+    const deleteObjectPromises = orphanedObjects.map((key) => {
+      return deleteObject(ctx.s3, key)
+    })
+
+    return Promise.all(deleteObjectPromises)
+  }),
 })

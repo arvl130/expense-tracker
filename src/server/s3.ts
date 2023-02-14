@@ -1,6 +1,7 @@
 import {
   DeleteObjectCommand,
   GetObjectCommand,
+  ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3"
@@ -63,4 +64,23 @@ export async function deleteObject(client: S3Client, key: string) {
   })
 
   await client.send(command)
+}
+
+export async function listObjects(client: S3Client, prefix: string) {
+  const command = new ListObjectsV2Command({
+    Bucket: S3_BUCKET_NAME,
+    Prefix: prefix,
+  })
+
+  const objects: string[] = []
+
+  const { Contents: pathObjects } = await client.send(command)
+  if (!pathObjects) return objects
+
+  pathObjects.forEach((object) => {
+    if (!object.Key) return
+    objects.push(object.Key)
+  })
+
+  return objects
 }

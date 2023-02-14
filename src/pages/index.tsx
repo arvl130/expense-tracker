@@ -58,8 +58,13 @@ export default function Home() {
   return (
     <main className="max-w-6xl mx-auto h-full p-6 grid grid-rows-[auto_auto_1fr]">
       <div className="flex justify-between mb-3">
-        <h2 className="text-lg font-semibold">Transactions</h2>
-        <div className="flex">
+        <div className="mb-3">
+          <h2 className="text-lg font-semibold">Transactions</h2>
+          <Link href="/settings" className="hover:underline">
+            Settings »
+          </Link>
+        </div>
+        <div className="flex items-start">
           <Link
             href="/transactions/create"
             className="px-4 py-2 rounded-md border border-gray-300 text-zinc-800 hover:bg-zinc-100 transition duration-200 font-medium"
