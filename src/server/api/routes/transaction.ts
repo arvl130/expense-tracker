@@ -22,6 +22,9 @@ export const transactionsRouter = router({
         where: {
           userId: input.userId,
         },
+        orderBy: {
+          accomplishedAt: "desc",
+        },
       })
     }),
   get: protectedProcedure

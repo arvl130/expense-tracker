@@ -71,14 +71,17 @@ export default function Home() {
       {transactions.length > 0 ? (
         <>
           <div className="max-w-2xl mx-auto w-full mb-3">
-            <div>
-              <span className="font-medium">Total</span>: ₱
-              {transactions.reduce((prevValue, currTransaction) => {
-                if (currTransaction.operation === "ADD")
-                  return prevValue + currTransaction.amount
+            <div className="flex justify-end items-end gap-2">
+              <span className="font-medium">CURRENT FUNDS:</span>
+              <span className="font-semibold text-3xl">
+                ₱
+                {transactions.reduce((prevValue, currTransaction) => {
+                  if (currTransaction.operation === "ADD")
+                    return prevValue + currTransaction.amount
 
-                return prevValue - currTransaction.amount
-              }, 0)}
+                  return prevValue - currTransaction.amount
+                }, 0)}
+              </span>
             </div>
           </div>
           <div>
@@ -93,7 +96,16 @@ export default function Home() {
                   className="max-w-2xl mx-auto grid grid-cols-[10rem_1fr_4rem] gap-2 px-4 py-2 border-b border-gray-300"
                 >
                   <div>{transaction.accomplishedAt}</div>
-                  <div>₱{transaction.amount}</div>
+                  <div
+                    className={
+                      transaction.operation === "ADD"
+                        ? "text-green-500"
+                        : "text-red-500"
+                    }
+                  >
+                    {transaction.operation === "ADD" ? "+" : "-"} ₱
+                    {transaction.amount}
+                  </div>
                   <div className="text-center">
                     <Link
                       href={`/transactions/${transaction.id}/view`}
