@@ -70,7 +70,7 @@ function TransactionImage({
   )
 }
 
-export default function ViewTransaction() {
+function Transaction({ id }: { id: string }) {
   const { query } = useRouter()
 
   const {
@@ -79,10 +79,10 @@ export default function ViewTransaction() {
     refetch: refetchTransactions,
   } = api.transactions.get.useQuery(
     {
-      id: query.id as string,
+      id,
     },
     {
-      enabled: !!query.id,
+      enabled: !!id,
     }
   )
 
@@ -90,40 +90,71 @@ export default function ViewTransaction() {
     return format(new Date(dateStr), "EEE LLL d, y K:mm a")
   }
 
-  const { status } = useRedirectOnUnauthenticated()
-  if (status !== "authenticated") return <Loading />
-
   if (isLoading)
-    return (
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="flex justify-between mb-3">
-          <div>
-            <h2 className="text-lg font-semibold">View Transaction</h2>
-            <Link href="/" className="hover:underline">
-              « Back
-            </Link>
-          </div>
-        </div>
-        <div className="text-center">Loading transaction ...</div>
-      </div>
-    )
+    return <div className="text-center">Loading transaction ...</div>
 
   if (!transaction)
     return (
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="flex justify-between mb-3">
-          <div>
-            <h2 className="text-lg font-semibold">View Transaction</h2>
-            <Link href="/" className="hover:underline">
-              « Back
-            </Link>
-          </div>
-        </div>
-        <div className="text-center">
-          Transaction could not be retrieved. {")"}:
-        </div>
+      <div className="text-center">
+        Transaction could not be retrieved. {")"}:
       </div>
     )
+
+  return (
+    <div className="max-w-xl mx-auto">
+      <div>
+        <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
+          <div className="font-medium text-right">Date:</div>
+          <div>{formatDate(transaction.accomplishedAt)}</div>
+        </div>
+        <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
+          <div className="font-medium text-right">Amount (₱):</div>
+          <div>{transaction.amount}</div>
+        </div>
+        <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
+          <div className="font-medium text-right">Description:</div>
+        </div>
+        <div className="border border-gray-400 px-4 py-2 min-h-[12rem] mb-3">
+          {transaction.description}
+        </div>
+        <div className="grid mb-3">
+          <div className="flex justify-between items-center font-medium mb-3">
+            <div>Receipts:</div>
+            <div>
+              <Link
+                href={`/transactions/${query.id}/receipts/add`}
+                className="inline-block px-4 py-2 rounded-md border border-gray-300 text-zinc-800 hover:bg-zinc-100 transition duration-200 font-medium"
+              >
+                Add
+              </Link>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {transaction.transactionImage.map((image) => {
+              return (
+                <TransactionImage
+                  key={image.id}
+                  transactionId={query.id as string}
+                  image={image}
+                  reload={() => {
+                    refetchTransactions()
+                  }}
+                />
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function ViewTransaction() {
+  const { query } = useRouter()
+  const transactionId = query.id as string
+
+  const { status } = useRedirectOnUnauthenticated()
+  if (status !== "authenticated") return <Loading />
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -136,58 +167,14 @@ export default function ViewTransaction() {
         </div>
         <div>
           <Link
-            href={`/transactions/${query.id}/edit`}
+            href={`/transactions/${transactionId}/edit`}
             className="inline-block px-4 py-2 rounded-md border border-gray-300 text-zinc-800 hover:bg-zinc-100 transition duration-200 font-medium"
           >
             Edit
           </Link>
         </div>
       </div>
-      <div className="max-w-xl mx-auto">
-        <div>
-          <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
-            <div className="font-medium text-right">Date:</div>
-            <div>{formatDate(transaction.accomplishedAt)}</div>
-          </div>
-          <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
-            <div className="font-medium text-right">Amount (₱):</div>
-            <div>{transaction.amount}</div>
-          </div>
-          <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
-            <div className="font-medium text-right">Description:</div>
-          </div>
-          <div className="border border-gray-400 px-4 py-2 min-h-[12rem] mb-3">
-            {transaction.description}
-          </div>
-          <div className="grid mb-3">
-            <div className="flex justify-between items-center font-medium mb-3">
-              <div>Receipts:</div>
-              <div>
-                <Link
-                  href={`/transactions/${query.id}/receipts/add`}
-                  className="inline-block px-4 py-2 rounded-md border border-gray-300 text-zinc-800 hover:bg-zinc-100 transition duration-200 font-medium"
-                >
-                  Add
-                </Link>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              {transaction.transactionImage.map((image) => {
-                return (
-                  <TransactionImage
-                    key={image.id}
-                    transactionId={query.id as string}
-                    image={image}
-                    reload={() => {
-                      refetchTransactions()
-                    }}
-                  />
-                )
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
+      <Transaction id={transactionId} />
     </div>
   )
 }
