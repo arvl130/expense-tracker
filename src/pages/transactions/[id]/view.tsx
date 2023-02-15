@@ -102,47 +102,51 @@ function Transaction({ id }: { id: string }) {
 
   return (
     <div className="max-w-xl mx-auto">
-      <div>
-        <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
-          <div className="font-medium text-right">Date:</div>
-          <div>{formatDate(transaction.accomplishedAt)}</div>
+      <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
+        <div className="font-medium text-right">Date:</div>
+        <div>{formatDate(transaction.accomplishedAt)}</div>
+      </div>
+      <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
+        <div className="font-medium text-right">Amount:</div>
+        <div
+          className={
+            transaction.operation === "ADD" ? "text-green-500" : "text-red-500"
+          }
+        >
+          ₱{transaction.amount} {transaction.operation === "ADD" ? "++" : "--"}
         </div>
-        <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
-          <div className="font-medium text-right">Amount (₱):</div>
-          <div>{transaction.amount}</div>
-        </div>
-        <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
-          <div className="font-medium text-right">Description:</div>
-        </div>
-        <div className="border border-gray-400 px-4 py-2 min-h-[12rem] mb-3">
-          {transaction.description}
-        </div>
-        <div className="grid mb-3">
-          <div className="flex justify-between items-center font-medium mb-3">
-            <div>Receipts:</div>
-            <div>
-              <Link
-                href={`/transactions/${query.id}/receipts/add`}
-                className="inline-block px-4 py-2 rounded-md border border-gray-300 text-zinc-800 hover:bg-zinc-100 transition duration-200 font-medium"
-              >
-                Add
-              </Link>
-            </div>
+      </div>
+      <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
+        <div className="font-medium text-right">Description:</div>
+      </div>
+      <div className="border border-gray-400 px-4 py-2 min-h-[12rem] mb-3">
+        {transaction.description}
+      </div>
+      <div className="grid mb-3">
+        <div className="flex justify-between items-center font-medium mb-3">
+          <div>Receipts:</div>
+          <div>
+            <Link
+              href={`/transactions/${query.id}/receipts/add`}
+              className="inline-block px-4 py-2 rounded-md border border-gray-300 text-zinc-800 hover:bg-zinc-100 transition duration-200 font-medium"
+            >
+              Add
+            </Link>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            {transaction.transactionImage.map((image) => {
-              return (
-                <TransactionImage
-                  key={image.id}
-                  transactionId={query.id as string}
-                  image={image}
-                  reload={() => {
-                    refetchTransactions()
-                  }}
-                />
-              )
-            })}
-          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          {transaction.transactionImage.map((image) => {
+            return (
+              <TransactionImage
+                key={image.id}
+                transactionId={query.id as string}
+                image={image}
+                reload={() => {
+                  refetchTransactions()
+                }}
+              />
+            )
+          })}
         </div>
       </div>
     </div>
