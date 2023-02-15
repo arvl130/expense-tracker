@@ -87,7 +87,7 @@ function Transaction({ id }: { id: string }) {
   )
 
   function formatDate(dateStr: string) {
-    return format(new Date(dateStr), "EEE LLL d, y K:mm a")
+    return format(new Date(dateStr), "EEE LLL d, y K:mm'\u00A0'a")
   }
 
   if (isLoading)
