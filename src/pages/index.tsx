@@ -3,76 +3,27 @@ import Link from "next/link"
 import { useRedirectOnUnauthenticated } from "@/hooks/useRedirect"
 import { api } from "@/utils/api"
 
-export default function Home() {
-  const { status, session } = useRedirectOnUnauthenticated()
-
+function TransactionsList({ userId }: { userId: string }) {
   const { data: transactions, isLoading } = api.transactions.getAll.useQuery(
     {
-      userId: session?.user?.id as string,
+      userId,
     },
     {
-      enabled: !!session?.user?.id,
+      enabled: !!userId,
     }
   )
-
-  if (status !== "authenticated") return <Loading />
-
   if (isLoading)
-    return (
-      <main className="max-w-6xl mx-auto p-6 grid grid-rows-[auto_1fr]">
-        <div className="flex justify-between">
-          <h2 className="text-lg font-semibold">Transactions</h2>
-          <div>
-            <Link
-              href="/transactions/create"
-              className="px-4 py-2 rounded-md border border-gray-300 text-zinc-800 hover:bg-zinc-100 transition duration-200 font-medium"
-            >
-              Create
-            </Link>
-          </div>
-        </div>
-        <div className="text-center mt-12">Loading transaction ...</div>
-      </main>
-    )
+    return <div className="text-center mt-12">Loading transaction ...</div>
 
   if (!transactions)
     return (
-      <main className="max-w-6xl mx-auto p-6 grid grid-rows-[auto_1fr]">
-        <div className="flex justify-between">
-          <h2 className="text-lg font-semibold">Transactions</h2>
-          <div>
-            <Link
-              href="/transactions/create"
-              className="px-4 py-2 rounded-md border border-gray-300 text-zinc-800 hover:bg-zinc-100 transition duration-200 font-medium"
-            >
-              Create
-            </Link>
-          </div>
-        </div>
-        <div className="text-center mt-12">
-          Transactions could not be retrieved. {")"}:
-        </div>
-      </main>
+      <div className="text-center mt-12">
+        Transactions could not be retrieved. {")"}:
+      </div>
     )
 
   return (
-    <main className="max-w-6xl mx-auto h-full p-6 grid grid-rows-[auto_auto_1fr]">
-      <div className="flex justify-between mb-3">
-        <div className="mb-3">
-          <h2 className="text-lg font-semibold">Transactions</h2>
-          <Link href="/settings" className="hover:underline">
-            Settings »
-          </Link>
-        </div>
-        <div className="flex items-start">
-          <Link
-            href="/transactions/create"
-            className="px-4 py-2 rounded-md border border-gray-300 text-zinc-800 hover:bg-zinc-100 transition duration-200 font-medium"
-          >
-            Create
-          </Link>
-        </div>
-      </div>
+    <>
       {transactions.length > 0 ? (
         <>
           <div className="max-w-2xl mx-auto w-full mb-3">
@@ -139,6 +90,35 @@ export default function Home() {
           </p>
         </div>
       )}
+    </>
+  )
+}
+
+export default function Home() {
+  const { status, session } = useRedirectOnUnauthenticated()
+  const userId = session?.user?.id as string
+
+  if (status !== "authenticated") return <Loading />
+
+  return (
+    <main className="max-w-6xl mx-auto h-full p-6 grid grid-rows-[auto_auto_1fr]">
+      <div className="flex justify-between mb-3">
+        <div className="mb-3">
+          <h2 className="text-lg font-semibold">Transactions</h2>
+          <Link href="/settings" className="hover:underline">
+            Settings »
+          </Link>
+        </div>
+        <div className="flex items-start">
+          <Link
+            href="/transactions/create"
+            className="px-4 py-2 rounded-md border border-gray-300 text-zinc-800 hover:bg-zinc-100 transition duration-200 font-medium"
+          >
+            Create
+          </Link>
+        </div>
+      </div>
+      <TransactionsList userId={userId} />
     </main>
   )
 }
