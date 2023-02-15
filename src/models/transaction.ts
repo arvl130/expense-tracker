@@ -42,7 +42,7 @@ export type CreateTransactionType = z.infer<typeof CreateTransactionSchema>
 export const EditTransactionSchema = z.object({
   id: z.string().uuid(),
   userId: z.string().cuid(),
-  accomplishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
+  accomplishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, {
     message: INVALID_DATE,
   }),
   description: z.string().min(1, {

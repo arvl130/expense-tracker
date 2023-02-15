@@ -146,7 +146,7 @@ export default function EditTransaction() {
             Date <span className="text-red-500 font-bold">*</span>
           </label>
           <input
-            type="date"
+            type="datetime-local"
             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-300/40"
             {...register("accomplishedAt")}
             defaultValue={transaction.accomplishedAt}
