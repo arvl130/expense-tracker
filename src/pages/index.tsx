@@ -27,16 +27,16 @@ function TransactionsList({ userId }: { userId: string }) {
       {transactions.length > 0 ? (
         <>
           <div className="max-w-2xl mx-auto w-full mb-2">
-            <div className="flex justify-between">
+            <div className="sm:flex justify-between">
               <div className="flex gap-2 items-baseline">
                 <span className="font-medium">TOTAL:</span>{" "}
-                <span className="font-semibold text-3xl">
+                <span className="font-semibold text-2xl sm:text-3xl">
                   {transactions.length}
                 </span>
               </div>
               <div className="flex gap-2 items-baseline">
                 <span className="font-medium">CURRENT FUNDS:</span>
-                <span className="font-semibold text-3xl">
+                <span className="font-semibold text-2xl sm:text-3xl">
                   ₱
                   {transactions.reduce((prevValue, currTransaction) => {
                     if (currTransaction.operation === "ADD")
