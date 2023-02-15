@@ -6,6 +6,7 @@ import { TransactionImage } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { format } from "date-fns"
 
 function TransactionImage({
   image,
@@ -85,6 +86,10 @@ export default function ViewTransaction() {
     }
   )
 
+  function formatDate(dateStr: string) {
+    return format(new Date(dateStr), "EEE LLL d, y K:mm a")
+  }
+
   const { status } = useRedirectOnUnauthenticated()
   if (status !== "authenticated") return <Loading />
 
@@ -142,7 +147,7 @@ export default function ViewTransaction() {
         <div>
           <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
             <div className="font-medium text-right">Date:</div>
-            <div>{transaction.accomplishedAt}</div>
+            <div>{formatDate(transaction.accomplishedAt)}</div>
           </div>
           <div className="grid grid-cols-[7rem_1fr] gap-2 mb-3">
             <div className="font-medium text-right">Amount (₱):</div>
