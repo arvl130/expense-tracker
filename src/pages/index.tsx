@@ -2,6 +2,7 @@ import Loading from "@/components/Loading"
 import Link from "next/link"
 import { useRedirectOnUnauthenticated } from "@/hooks/useRedirect"
 import { api } from "@/utils/api"
+import { format } from "date-fns"
 
 function TransactionsList({ userId }: { userId: string }) {
   const { data: transactions, isLoading } = api.transactions.getAll.useQuery(
@@ -12,6 +13,11 @@ function TransactionsList({ userId }: { userId: string }) {
       enabled: !!userId,
     }
   )
+
+  function formatDate(dateStr: string) {
+    return format(new Date(dateStr), "y-MMM-dd K:m'\u00A0'a")
+  }
+
   if (isLoading)
     return <div className="text-center mt-12">Loading transaction ...</div>
 
@@ -49,7 +55,7 @@ function TransactionsList({ userId }: { userId: string }) {
             </div>
           </div>
           <div>
-            <div className="max-w-2xl mx-auto grid grid-cols-[10rem_1fr] gap-2 bg-zinc-600 text-white px-4 py-2 font-medium">
+            <div className="max-w-2xl mx-auto grid grid-cols-[minmax(0,_10rem)_1fr_4rem] gap-2 bg-zinc-600 text-white px-4 py-2 font-medium">
               <div>Date</div>
               <div>Amount</div>
             </div>
@@ -57,9 +63,9 @@ function TransactionsList({ userId }: { userId: string }) {
               return (
                 <div
                   key={transaction.id}
-                  className="max-w-2xl mx-auto grid grid-cols-[10rem_1fr_4rem] gap-2 px-4 py-2 border-b border-gray-300"
+                  className="max-w-2xl mx-auto grid grid-cols-[minmax(0,_10rem)_1fr_4rem] gap-2 px-4 py-2 border-b border-gray-300"
                 >
-                  <div>{transaction.accomplishedAt}</div>
+                  <div>{formatDate(transaction.accomplishedAt)}</div>
                   <div
                     className={
                       transaction.operation === "ADD"
@@ -67,7 +73,7 @@ function TransactionsList({ userId }: { userId: string }) {
                         : "text-red-500"
                     }
                   >
-                    {transaction.operation === "ADD" ? "+" : "-"} ₱
+                    {transaction.operation === "ADD" ? "+" : "-"}&nbsp;₱
                     {transaction.amount}
                   </div>
                   <div className="text-center">
