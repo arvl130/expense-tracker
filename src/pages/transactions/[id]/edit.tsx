@@ -68,14 +68,16 @@ export default function EditTransaction() {
             « Back
           </Link>
         </div>
-        <div>
-          <button
-            type="submit"
-            className="px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-400 transition duration-200 font-medium"
-          >
-            Edit
-          </button>
-        </div>
+        {transaction && (
+          <div>
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-400 transition duration-200 font-medium"
+            >
+              Edit
+            </button>
+          </div>
+        )}
       </div>
 
       {isLoadingTransaction ? (
