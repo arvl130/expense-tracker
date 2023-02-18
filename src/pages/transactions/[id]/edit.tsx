@@ -181,7 +181,7 @@ export default function EditTransaction() {
           <select
             className="px-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-300/40"
             {...register("operation")}
-            defaultValue={"ADD"}
+            defaultValue={transaction.operation}
           >
             <option value={"ADD"}>Add</option>
             <option value={"SUB"}>Subtract</option>
