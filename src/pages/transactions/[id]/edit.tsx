@@ -24,8 +24,14 @@ export default function EditTransaction() {
     resolver: zodResolver(EditTransactionSchema),
   })
 
+  const utils = api.useContext()
   const { mutate: editTransaction } = api.transactions.edit.useMutation({
     onSuccess: () => {
+      // Invalidate query cache for this transaction.
+      utils.transactions.get.invalidate({
+        id: query.id as string,
+      })
+
       router.push(`/transactions/${query.id}/view`)
     },
   })

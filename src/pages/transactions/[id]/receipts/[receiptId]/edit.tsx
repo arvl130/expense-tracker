@@ -38,9 +38,15 @@ export default function EditReceipt() {
   const { mutateAsync: getUploadUrl } =
     api.transactionImages.getUploadUrl.useMutation()
 
+  const utils = api.useContext()
   const { mutate: editTransactionImage } =
     api.transactionImages.edit.useMutation({
       onSuccess: () => {
+        // Invalidate query cache for this transaction image.
+        utils.transactionImages.get.invalidate({
+          id: query.receiptId as string,
+        })
+
         router.push(`/transactions/${query.id}/view`)
       },
     })
