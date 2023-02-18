@@ -114,6 +114,7 @@ function ImportExportSection() {
       <div className="grid grid-cols-[1fr_auto_auto] gap-2 items-center">
         <input
           type="file"
+          accept="application/json"
           ref={inputFileEl}
           onChange={(e) => {
             if (!e.target.files) {
