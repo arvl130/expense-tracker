@@ -55,7 +55,7 @@ function TransactionsList({ userId }: { userId: string }) {
             </div>
           </div>
           <div>
-            <div className="max-w-2xl mx-auto grid grid-cols-[minmax(0,_10rem)_1fr_4rem] gap-2 bg-zinc-600 text-white px-4 py-2 font-medium">
+            <div className="max-w-2xl mx-auto grid grid-cols-[minmax(0,_12rem)_1fr_4rem] gap-2 bg-zinc-600 text-white px-4 py-2 font-medium">
               <div>Date</div>
               <div>Amount</div>
             </div>
@@ -63,7 +63,7 @@ function TransactionsList({ userId }: { userId: string }) {
               return (
                 <div
                   key={transaction.id}
-                  className="max-w-2xl mx-auto grid grid-cols-[minmax(0,_10rem)_1fr_4rem] gap-2 px-4 py-2 border-b border-gray-300"
+                  className="max-w-2xl mx-auto grid grid-cols-[minmax(0,_12rem)_1fr_4rem] gap-2 px-4 py-2 border-b border-gray-300"
                 >
                   <div>{formatDate(transaction.accomplishedAt)}</div>
                   <div
