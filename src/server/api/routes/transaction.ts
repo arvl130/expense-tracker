@@ -5,6 +5,7 @@ import {
   CreateTransactionSchema,
   EditTransactionSchema,
   DeleteTransactionSchema,
+  ImportTransactionsSchema,
 } from "@/models/transaction"
 
 export const transactionsRouter = router({
@@ -120,5 +121,45 @@ export const transactionsRouter = router({
           id: input.id,
         },
       })
+    }),
+  export: protectedProcedure.mutation(async ({ ctx }) => {
+    const transactions = await ctx.prisma.transaction.findMany({
+      where: {
+        userId: ctx.user.id,
+      },
+      orderBy: {
+        accomplishedAt: "desc",
+      },
+    })
+
+    const transactionImages = await ctx.prisma.transactionImage.findMany({
+      where: {
+        transaction: {
+          userId: ctx.user.id,
+        },
+      },
+    })
+
+    return {
+      transactions,
+      transactionImages,
+    }
+  }),
+  import: protectedProcedure
+    .input(ImportTransactionsSchema)
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.$transaction([
+        ctx.prisma.transaction.deleteMany({
+          where: {
+            userId: ctx.user.id,
+          },
+        }),
+        ctx.prisma.transaction.createMany({
+          data: input.transactions,
+        }),
+        ctx.prisma.transactionImage.createMany({
+          data: input.transactionImages,
+        }),
+      ])
     }),
 })

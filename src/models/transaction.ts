@@ -1,3 +1,4 @@
+import { Transaction, TransactionImage } from "@prisma/client"
 import { z } from "zod"
 import {
   CANNOT_BE_EMPTY,
@@ -66,3 +67,8 @@ export const DeleteTransactionSchema = z.object({
 })
 
 export type DeleteTransactionType = z.infer<typeof GetTransactionSchema>
+
+export const ImportTransactionsSchema = z.object({
+  transactions: z.custom<Transaction[]>(),
+  transactionImages: z.custom<TransactionImage[]>(),
+})
