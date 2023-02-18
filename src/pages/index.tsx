@@ -4,15 +4,8 @@ import { useRedirectOnUnauthenticated } from "@/hooks/useRedirect"
 import { api } from "@/utils/api"
 import { format } from "date-fns"
 
-function TransactionsList({ userId }: { userId: string }) {
-  const { data: transactions, isLoading } = api.transactions.getAll.useQuery(
-    {
-      userId,
-    },
-    {
-      enabled: !!userId,
-    }
-  )
+function TransactionsList() {
+  const { data: transactions, isLoading } = api.transactions.getAll.useQuery()
 
   function formatDate(dateStr: string) {
     return format(new Date(dateStr), "y-MMM-dd K:m'\u00A0'a")
@@ -110,8 +103,6 @@ function TransactionsList({ userId }: { userId: string }) {
 
 export default function Home() {
   const { status, session } = useRedirectOnUnauthenticated()
-  const userId = session?.user?.id as string
-
   if (status !== "authenticated") return <Loading />
 
   return (
@@ -132,7 +123,7 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      <TransactionsList userId={userId} />
+      <TransactionsList />
     </main>
   )
 }

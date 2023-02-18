@@ -2,31 +2,22 @@ import { TRPCError } from "@trpc/server"
 import { protectedProcedure, router } from "../trpc"
 import {
   GetTransactionSchema,
-  GetTransactionsSchema,
   CreateTransactionSchema,
   EditTransactionSchema,
   DeleteTransactionSchema,
 } from "@/models/transaction"
 
 export const transactionsRouter = router({
-  getAll: protectedProcedure
-    .input(GetTransactionsSchema)
-    .query(({ input, ctx }) => {
-      // Users can only query their own transactions.
-      if (ctx.user.id !== input.userId)
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-        })
-
-      return ctx.prisma.transaction.findMany({
-        where: {
-          userId: input.userId,
-        },
-        orderBy: {
-          accomplishedAt: "desc",
-        },
-      })
-    }),
+  getAll: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.transaction.findMany({
+      where: {
+        userId: ctx.user.id,
+      },
+      orderBy: {
+        accomplishedAt: "desc",
+      },
+    })
+  }),
   get: protectedProcedure
     .input(GetTransactionSchema)
     .query(async ({ input, ctx }) => {
