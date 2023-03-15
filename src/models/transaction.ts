@@ -19,9 +19,11 @@ export const GetTransactionSchema = z.object({
 
 export type GetTransactionType = z.infer<typeof GetTransactionSchema>
 
+const VALID_DATETIME_LOCAL_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/
+
 export const CreateTransactionSchema = z.object({
   userId: z.string().cuid(),
-  accomplishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
+  accomplishedAt: z.string().regex(VALID_DATETIME_LOCAL_REGEX, {
     message: INVALID_DATE,
   }),
   description: z.string().min(1, {
@@ -43,7 +45,7 @@ export type CreateTransactionType = z.infer<typeof CreateTransactionSchema>
 export const EditTransactionSchema = z.object({
   id: z.string().uuid(),
   userId: z.string().cuid(),
-  accomplishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, {
+  accomplishedAt: z.string().regex(VALID_DATETIME_LOCAL_REGEX, {
     message: INVALID_DATE,
   }),
   description: z.string().min(1, {
