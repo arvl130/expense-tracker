@@ -1,13 +1,13 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]"
 import { inferAsyncReturnType, initTRPC, TRPCError } from "@trpc/server"
 import { CreateNextContextOptions } from "@trpc/server/adapters/next"
-import { unstable_getServerSession } from "next-auth"
+import { getServerSession } from "next-auth"
 import SuperJSON from "superjson"
 import { prisma } from "../db"
 import { client as s3 } from "../s3"
 
 export async function createContext({ req, res }: CreateNextContextOptions) {
-  const session = await unstable_getServerSession(req, res, authOptions)
+  const session = await getServerSession(req, res, authOptions)
 
   return {
     s3,
