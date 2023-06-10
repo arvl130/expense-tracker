@@ -116,6 +116,7 @@ export default function Home() {
             type="number"
             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-300/40"
             min={1}
+            step={0.01}
             defaultValue={1}
             {...register("amount", {
               valueAsNumber: true,
