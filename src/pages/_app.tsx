@@ -5,6 +5,17 @@ import { api } from "@/utils/api"
 import { SessionProvider, signIn, signOut } from "next-auth/react"
 import { useSession } from "next-auth/react"
 import { Inter } from "@next/font/google"
+import { Decimal } from "decimal.js"
+import SuperJSON from "superjson"
+
+SuperJSON.registerCustom<Decimal, string>(
+  {
+    isApplicable: (v): v is Decimal => Decimal.isDecimal(v),
+    serialize: (v) => v.toJSON(),
+    deserialize: (v) => new Decimal(v),
+  },
+  "decimal.js"
+)
 
 const inter = Inter({
   subsets: ["latin"],

@@ -138,7 +138,7 @@ export default function ViewTransaction() {
                         : "text-red-500"
                     }
                   >
-                    ₱{transaction.amount}{" "}
+                    ₱{transaction.amount.toNumber()}{" "}
                     {transaction.operation === "ADD" ? "++" : "--"}
                   </div>
                 </div>

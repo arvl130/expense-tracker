@@ -72,7 +72,7 @@ model Transaction {
   id               String             @id @default(uuid())
   description      String
   operation        Operation
-  amount           Int
+  amount           Decimal
   accomplishedAt   String
   userId           String
   user             User?              @relation(fields: [userId], references: [id], onDelete: Cascade)

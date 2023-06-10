@@ -39,9 +39,9 @@ function TransactionsList() {
                   ₱
                   {transactions.reduce((prevValue, currTransaction) => {
                     if (currTransaction.operation === "ADD")
-                      return prevValue + currTransaction.amount
+                      return prevValue + currTransaction.amount.toNumber()
 
-                    return prevValue - currTransaction.amount
+                    return prevValue - currTransaction.amount.toNumber()
                   }, 0)}
                 </span>
               </div>
@@ -67,7 +67,7 @@ function TransactionsList() {
                     }
                   >
                     {transaction.operation === "ADD" ? "+" : "-"}&nbsp;₱
-                    {transaction.amount}
+                    {transaction.amount.toNumber()}
                   </div>
                   <div className="text-center">
                     <Link
