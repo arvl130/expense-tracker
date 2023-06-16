@@ -1,8 +1,12 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["ageulin-expense-tracker.s3.ap-southeast-1.amazonaws.com"],
+    domains:
+      typeof process.env.CLOUDFRONT_DISTRIBUTION_DOMAIN === "string"
+        ? [process.env.CLOUDFRONT_DISTRIBUTION_DOMAIN]
+        : undefined,
   },
 }
 
