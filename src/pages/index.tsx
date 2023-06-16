@@ -3,6 +3,7 @@ import Link from "next/link"
 import { useRedirectOnUnauthenticated } from "@/hooks/useRedirect"
 import { api } from "@/utils/api"
 import { format } from "date-fns"
+import Decimal from "decimal.js"
 
 function TransactionsList() {
   const { data: transactions, isLoading } = api.transactions.getAll.useQuery()
@@ -37,12 +38,18 @@ function TransactionsList() {
                 <span className="font-medium">CURRENT FUNDS:</span>
                 <span className="font-semibold text-2xl sm:text-3xl">
                   ₱
-                  {transactions.reduce((prevValue, currTransaction) => {
-                    if (currTransaction.operation === "ADD")
-                      return prevValue + currTransaction.amount.toNumber()
+                  {transactions
+                    .reduce((prevValue, currTransaction) => {
+                      if (currTransaction.operation === "ADD")
+                        return currTransaction.amount
+                          .plus(new Decimal(prevValue))
+                          .toNumber()
 
-                    return prevValue - currTransaction.amount.toNumber()
-                  }, 0)}
+                      return currTransaction.amount
+                        .minus(new Decimal(prevValue))
+                        .toNumber()
+                    }, 0)
+                    .toFixed(2)}
                 </span>
               </div>
             </div>
