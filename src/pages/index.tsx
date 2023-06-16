@@ -9,7 +9,7 @@ function TransactionsList() {
   const { data: transactions, isLoading } = api.transactions.getAll.useQuery()
 
   function formatDate(dateStr: string) {
-    return format(new Date(dateStr), "y-MMM-dd K:m'\u00A0'a")
+    return format(new Date(dateStr), "y-MMM-dd K:mm'\u00A0'a")
   }
 
   if (isLoading)
